@@ -1,18 +1,29 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    alias(libs.plugins.android.application) apply false
-    alias(libs.plugins.jetbrains.kotlin.android) apply false
-    id ("com.chaquo.python") version "15.0.1" apply  false
+    id("com.android.application") version "8.1.1" apply false
+    id("org.jetbrains.kotlin.android") version "1.9.0" apply false
+    id("com.chaquo.python") version "15.0.1" apply false
 }
 
 buildscript {
     repositories {
         google()
         mavenCentral()
-        jcenter()
+        gradlePluginPortal()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:7.0.4")
-        classpath("com.chaquo.python:gradle:10.0.1")  // ここにChaquopyを追加
+        // Remove duplicate or incorrect versions
+        classpath("com.android.tools.build:gradle:8.1.1")
+        classpath("com.chaquo.python:gradle:15.0.1")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0")
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        jcenter()
     }
 }

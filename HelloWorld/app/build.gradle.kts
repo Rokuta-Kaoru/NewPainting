@@ -1,5 +1,5 @@
 plugins {
-    id ("com.android.application")
+    id("com.android.application") version "8.1.1" apply false
     id ("kotlin-android")
     id ("com.chaquo.python") version "15.0.1"
 }
@@ -81,6 +81,8 @@ dependencies {
     implementation ("androidx.appcompat:appcompat:1.5.1")
     implementation ("androidx.core:core-ktx:1.9.0")
     implementation ("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.0")
+    implementation(project(":OpenCV4And"))
+    implementation("com.android.support:appcompat-v7:28.0.0")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.5.1") // 最新バージョン
     debugImplementation("androidx.compose.ui:ui-tooling:1.5.1") // 最新バージョン
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.1") // 最新バージョン

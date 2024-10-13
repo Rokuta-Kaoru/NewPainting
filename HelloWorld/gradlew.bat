@@ -1,89 +1,52 @@
-@rem
-@rem Copyright 2015 the original author or authors.
-@rem
-@rem Licensed under the Apache License, Version 2.0 (the "License");
-@rem you may not use this file except in compliance with the License.
-@rem You may obtain a copy of the License at
-@rem
-@rem      https://www.apache.org/licenses/LICENSE-2.0
-@rem
-@rem Unless required by applicable law or agreed to in writing, software
-@rem distributed under the License is distributed on an "AS IS" BASIS,
-@rem WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-@rem See the License for the specific language governing permissions and
-@rem limitations under the License.
-@rem
+@ECHO OFF
+rem ##########################################################################
+rem
+rem  Gradle startup script for Windows
+rem
+rem ##########################################################################
 
-@if "%DEBUG%" == "" @echo off
-@rem ##########################################################################
-@rem
-@rem  Gradle startup script for Windows
-@rem
-@rem ##########################################################################
+@IF NOT "%OS%"=="Windows_NT" GOTO end
+SETLOCAL
 
-@rem Set local scope for the variables with windows NT shell
-if "%OS%"=="Windows_NT" setlocal
+rem Attempt to set APP_HOME
+SET APP_HOME=
+SET DIRNAME=%~dp0
+IF "%DIRNAME%"=="." SET DIRNAME=%CD%
+SET APP_HOME=%DIRNAME%
 
-set DIRNAME=%~dp0
-if "%DIRNAME%" == "" set DIRNAME=.
-set APP_BASE_NAME=%~n0
-set APP_HOME=%DIRNAME%
+SET APP_NAME=gradle
+SET APP_BASE_NAME=%~nx0
 
-@rem Resolve any "." and ".." in APP_HOME to make it shorter.
-for %%i in ("%APP_HOME%") do set APP_HOME=%%~fi
+SET CLASSPATH=%APP_HOME%gradle\wrapper\gradle-wrapper.jar
 
-@rem Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
-set DEFAULT_JVM_OPTS="-Xmx64m" "-Xms64m"
+SET DEFAULT_JVM_OPTS=
 
-@rem Find java.exe
-if defined JAVA_HOME goto findJavaFromJavaHome
+rem Find java.exe
+IF NOT "%JAVA_HOME%"=="" SET JAVACMD=%JAVA_HOME%\bin\java.exe
 
-set JAVA_EXE=java.exe
-%JAVA_EXE% -version >NUL 2>&1
-if "%ERRORLEVEL%" == "0" goto execute
+IF EXIST "%JAVACMD%" GOTO init
 
-echo.
-echo ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
-echo.
-echo Please set the JAVA_HOME variable in your environment to match the
-echo location of your Java installation.
+SET JAVACMD=java
+rem Try to find java.exe from PATH
+SET TEMP_JAVA_EXE=
+FOR %%i IN (java.exe) DO SET TEMP_JAVA_EXE=%%~dp$PATH:i\java.exe
+SET TEMP_JAVA_EXE=%TEMP_JAVA_EXE:~0,-9%
+rem If java.exe is found from PATH, set it as JAVACMD
+IF NOT "%TEMP_JAVA_EXE%"=="" SET JAVACMD=%TEMP_JAVA_EXE%
 
-goto fail
+:init
 
-:findJavaFromJavaHome
-set JAVA_HOME=%JAVA_HOME:"=%
-set JAVA_EXE=%JAVA_HOME%/bin/java.exe
+IF NOT EXIST "%JAVACMD%" (
+    ECHO ERROR: JAVA_HOME is set to an invalid directory: "%JAVA_HOME%"
+    ECHO Please set the JAVA_HOME variable in your environment to match the location of your Java installation.
+    EXIT /B 1
+)
 
-if exist "%JAVA_EXE%" goto execute
+ECHO.
+ECHO Setting Java system property: user.home to C:\Gradle\gradle-8.10.2
+ECHO.
 
-echo.
-echo ERROR: JAVA_HOME is set to an invalid directory: %JAVA_HOME%
-echo.
-echo Please set the JAVA_HOME variable in your environment to match the
-echo location of your Java installation.
-
-goto fail
-
-:exec
-@rem Setup the command line
-
-set CLASSPATH=%APP_HOME%\gradle\wrapper\gradle-wrapper.jar
-
-
-@rem Execute Gradle
-"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %GRADLE_OPTS% "-Dorg.gradle.appname=%APP_BASE_NAME%" -classpath "%CLASSPATH%" org.gradle.wrapper.GradleWrapperMain %*
+:run
+"%JAVACMD%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %GRADLE_OPTS% -classpath "%CLASSPATH%" org.gradle.wrapper.GradleWrapperMain %*
 
 :end
-@rem End local scope for the variables with windows NT shell
-if "%ERRORLEVEL%"=="0" goto mainEnd
-
-:fail
-rem Set variable GRADLE_EXIT_CONSOLE if you need the _script_ return code instead of
-rem the _cmd.exe /c_ return code!
-if  not "" == "%GRADLE_EXIT_CONSOLE%" exit 1
-exit /b 1
-
-:mainEnd
-if "%OS%"=="Windows_NT" endlocal
-
-:omega
