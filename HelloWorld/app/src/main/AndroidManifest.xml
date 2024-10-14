@@ -21,6 +21,11 @@
         android:name="com.chaquo.python.android.PyApplication"
         tools:targetApi="33">
 
+        <!-- OpenCVエンジンを初期化 -->
+        <meta-data
+            android:name="org.opencv.engine.OPENCV_ENGINE"
+            android:value="org.opencv.engine.Engine" />
+
         <!-- SecondActivityを最初の画面として設定 -->
         <activity
             android:name=".SecondActivity"

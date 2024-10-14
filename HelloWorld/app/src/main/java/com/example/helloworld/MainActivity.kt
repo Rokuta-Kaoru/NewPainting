@@ -15,7 +15,15 @@ import androidx.compose.ui.platform.ComposeView
 import com.chaquo.python.PyObject
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
+import org.opencv.core.*
+import org.opencv.android.*
+import org.opencv.imgproc.*
+import org.opencv.imgcodecs.*
 import android.util.Log
+import org.bytedeco.opencv.global.opencv_core
+import org.bytedeco.opencv.opencv_core.Mat
+import org.bytedeco.opencv.global.opencv_imgcodecs
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +36,15 @@ class MainActivity : ComponentActivity() {
         if (!Python.isStarted()) {
             Python.start(AndroidPlatform(this))
         }
+        //画像の読み込み
+        val img: Mat = opencv_imgcodecs.imread("res/drawable/regiscan.png")
+        // OpenCVの初期化
+        if (!img.empty()) {
+            println("OpenCV is working!")
+        } else {
+            println("OpenCV failed to load the image.")
+        }
+
         //pythonのインスタンスを取得
         val py = Python.getInstance()
 
@@ -44,7 +61,7 @@ class MainActivity : ComponentActivity() {
         val python = Python.getInstance()
 
         //pythonスクリプトを呼び出し
-        val pythonModule:PyObject = python.getModule("canny_and_pypx")
+        //val pythonModule:PyObject = python.getModule("canny_and_pypx")
 
         //画像ファイルのパス指定(input,output)
         val inputImageId = R.drawable.regiscan

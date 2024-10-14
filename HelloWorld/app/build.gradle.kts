@@ -55,6 +55,17 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    sourceSets {
+        getByName("main") {
+            jniLibs.srcDirs("src/main/libs/x86")
+
+        }
+    }
+    configurations.all {
+        resolutionStrategy {
+            force("org.opencv:opencv-android:4.6.0")
+        }
+    }
 }
 
 chaquopy{
@@ -81,6 +92,8 @@ dependencies {
     implementation ("androidx.appcompat:appcompat:1.5.1")
     implementation ("androidx.core:core-ktx:1.9.0")
     implementation ("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.0")
+    implementation("org.bytedeco:opencv:4.6.0-1.5.8")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.21")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.5.1") // 最新バージョン
     debugImplementation("androidx.compose.ui:ui-tooling:1.5.1") // 最新バージョン
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.1") // 最新バージョン
