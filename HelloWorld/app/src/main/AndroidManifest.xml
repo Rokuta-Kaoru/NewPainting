@@ -23,8 +23,8 @@
 
         <!-- OpenCVエンジンを初期化 -->
         <meta-data
-            android:name="org.opencv.engine.OPENCV_ENGINE"
-            android:value="org.opencv.engine.Engine" />
+            android:name="org.opencv.engine"
+            android:value="OpenCV" />
 
         <!-- SecondActivityを最初の画面として設定 -->
         <activity
