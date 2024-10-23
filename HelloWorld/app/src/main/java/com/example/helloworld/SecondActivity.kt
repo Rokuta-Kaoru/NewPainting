@@ -13,7 +13,7 @@ class SecondActivity : AppCompatActivity() {
 
         val start = findViewById<Button>(R.id.change_btn)
         start.setOnClickListener{
-            val intent = Intent(this,MainActivity::class.java)
+            val intent = Intent(this,ImageReceive::class.java)
             startActivity(intent)
         }
     }

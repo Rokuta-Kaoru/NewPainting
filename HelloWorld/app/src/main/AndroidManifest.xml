@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -18,31 +17,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HelloWorld"
-        android:name="com.chaquo.python.android.PyApplication"
+        android:name=".MyApplication"
         tools:targetApi="33">
 
-        <!-- SecondActivityを最初の画面として設定 -->
-        <activity
-            android:name=".SecondActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.HelloWorld">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+    <!-- アクティビティの定義 -->
+    <activity
+        android:name=".MainActivity"
+        android:exported="true"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.HelloWorld">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
 
-        <activity
-            android:name=".Arduino"
-            android:exported="true" />
+    <activity
+        android:name=".Arduino"
+        android:exported="true" />
+    <activity
+        android:name=".ImageReceive"
+        android:exported="true" />
 
-        <!-- 他のアクティビティがある場合は、ここに追加 -->
-        <activity
-            android:name=".MainActivity" /> <!-- MainActivityも追加する場合 -->
+    <!-- 他のアクティビティがある場合は、ここに追加 -->
+    <!--<activity
+        android:name=".MainActivity" /> --><!-- MainActivityも追加する場合 -->
+    <activity
+        android:name=".Post"/>
     </application>
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 </manifest>
