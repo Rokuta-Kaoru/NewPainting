@@ -6,9 +6,9 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothGattCharacteristic
+import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
-import android.bluetooth.le.BluetoothLeScanner
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.TextView
@@ -16,7 +16,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
-class Arduino :AppCompatActivity(){
+class Arduino : AppCompatActivity() {
+
     private lateinit var bluetoothAdapter: BluetoothAdapter
     private lateinit var bluetoothLeScanner: BluetoothLeScanner
     private lateinit var textView: TextView
@@ -31,18 +32,56 @@ class Arduino :AppCompatActivity(){
 
         // Bluetoothアダプターを取得
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-        bluetoothLeScanner = bluetoothAdapter.bluetoothLeScanner
 
         // パーミッションの確認
+        checkPermissionsAndStart()
+    }
+
+    // パーミッションを確認し、足りない場合はリクエスト
+    private fun checkPermissionsAndStart() {
+        val permissionsNeeded = mutableListOf<String>()
+
+        // 各パーミッションを確認
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)
-            != PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN)
             != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                arrayOf(Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN), 1)
-        } else {
-            startScan()
+            permissionsNeeded.add(Manifest.permission.BLUETOOTH_CONNECT)
         }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN)
+            != PackageManager.PERMISSION_GRANTED) {
+            permissionsNeeded.add(Manifest.permission.BLUETOOTH_SCAN)
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED) {
+            permissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+
+        // リクエストする必要がある場合はリクエスト
+        if (permissionsNeeded.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, permissionsNeeded.toTypedArray(), 1)
+        } else {
+            // パーミッションがすでに許可されている場合、BluetoothLeScannerを初期化してスキャン開始
+            initializeBluetoothLeScanner()
+        }
+    }
+
+    // パーミッションリクエストの結果を処理
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1) {
+            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                // パーミッションが許可された場合、BluetoothLeScannerを初期化してスキャン開始
+                initializeBluetoothLeScanner()
+            } else {
+                // パーミッションが拒否された場合の処理
+                textView.text = "Bluetooth接続またはスキャンのパーミッションが拒否されました。"
+            }
+        }
+    }
+
+    // BluetoothLeScannerを初期化
+    private fun initializeBluetoothLeScanner() {
+        bluetoothLeScanner = bluetoothAdapter.bluetoothLeScanner
+        startScan()
     }
 
     // BLEデバイスのスキャンを開始
@@ -55,13 +94,11 @@ class Arduino :AppCompatActivity(){
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             result?.let {
                 val device: BluetoothDevice = it.device
-                val deviceName = device.name
+                val deviceName = device.name ?: "Unknown Device"
 
                 // ArduinoR4WiFiという名前のデバイスを見つけたら接続
                 if (deviceName == "ArduinoR4WiFi") {
-                    runOnUiThread {
-                        textView.text = "デバイス発見: $deviceName"
-                    }
+                    textView.text = "デバイス発見: $deviceName"
                     bluetoothLeScanner.stopScan(this)
 
                     // GATT接続を開始
@@ -76,9 +113,6 @@ class Arduino :AppCompatActivity(){
         override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
             super.onConnectionStateChange(gatt, status, newState)
             if (newState == BluetoothGatt.STATE_CONNECTED) {
-                runOnUiThread {
-                    textView.text = "接続完了"
-                }
                 gatt?.discoverServices()  // サービスの発見
             }
         }
@@ -86,14 +120,10 @@ class Arduino :AppCompatActivity(){
         override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
             super.onServicesDiscovered(gatt, status)
 
-            if (status == BluetoothGatt.GATT_SUCCESS) {
-                // サービスが発見された後、キャラクタリスティックを読み取る
-                val service = gatt?.getService(java.util.UUID.fromString("180C"))
-                val characteristic = service?.getCharacteristic(java.util.UUID.fromString("2A56"))
-                if (characteristic != null) {
-                    gatt.readCharacteristic(characteristic)
-                }
-            }
+            // サービスが発見された後、キャラクタリスティックを読み取る
+            val service = gatt?.getService(java.util.UUID.fromString("180C"))
+            val characteristic = service?.getCharacteristic(java.util.UUID.fromString("2A56"))
+            gatt?.readCharacteristic(characteristic)
         }
 
         override fun onCharacteristicRead(

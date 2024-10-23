@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- postIdを入力するEditText -->
+    <EditText
+        android:id="@+id/postIdInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Post IDを入力" />
+
+    <!-- 画像と目標金額を取得するためのボタン -->
+    <Button
+        android:id="@+id/selectImageBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="画像と目標金額を取得"
+        android:layout_marginTop="16dp" />
+
+    <!-- 取得した画像を表示するImageView -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="16dp" />
+
+    <!-- 取得した目標金額を表示するTextView -->
+    <TextView
+        android:id="@+id/targetAmountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="目標金額: 0 円"
+        android:layout_marginTop="8dp" />
+
+    <!-- メイン画面に戻るためのボタン -->
+    <Button
+        android:id="@+id/navigateToMainBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ぬりえを生成"
+        android:visibility="gone" /> <!-- 初期状態では非表示 -->
+</LinearLayout>
